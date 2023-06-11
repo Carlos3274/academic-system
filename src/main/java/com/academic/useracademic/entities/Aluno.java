@@ -19,6 +19,12 @@ public class Aluno  {
     public Aluno() {
     }
 
+    public void updateFields(Aluno updatedAluno) {
+        this.setName(updatedAluno.getName());
+        this.setEmail(updatedAluno.getEmail());
+        this.setCurso(updatedAluno.getCurso());
+        this.setMatricula(updatedAluno.getMatricula());
+    }
     public int getMatricula() {
         return matricula;
     }
