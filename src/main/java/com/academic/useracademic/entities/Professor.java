@@ -15,8 +15,13 @@ public class Professor  {
     private Curso curso;
 
     public Professor() {
-
     }
+
+    public void updateFields(Professor updatedAluno) {
+        this.setName(updatedAluno.getName());
+        this.setEmail(updatedAluno.getEmail());
+        this.setCurso(updatedAluno.getCurso());
+        }
 
     public String getName() {
         return name;

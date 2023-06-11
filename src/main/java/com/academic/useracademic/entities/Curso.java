@@ -9,8 +9,11 @@ public class Curso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    public Curso() {
 
+    public Curso() {
+    }
+    public void updateFields(Aluno updatedAluno) {
+        this.setName(updatedAluno.getName());
     }
     public Long getId() {
         return id;
