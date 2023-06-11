@@ -17,10 +17,10 @@ public class Professor  {
     public Professor() {
     }
 
-    public void updateFields(Professor updatedAluno) {
-        this.setName(updatedAluno.getName());
-        this.setEmail(updatedAluno.getEmail());
-        this.setCurso(updatedAluno.getCurso());
+    public void updateFields(Professor updatedProfessor) {
+        this.setName(updatedProfessor.getName());
+        this.setEmail(updatedProfessor.getEmail());
+        this.setCurso(updatedProfessor.getCurso());
         }
 
     public String getName() {

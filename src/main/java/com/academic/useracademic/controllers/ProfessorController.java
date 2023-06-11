@@ -37,9 +37,9 @@ public class ProfessorController {
     }
 
     @PutMapping(value = "/{id}")
-    public Professor update(@PathVariable Long id, @RequestBody Professor updateProfessor) {
+    public Professor update(@PathVariable Long id, @RequestBody Professor updatedProfessor) {
         Professor existingProfessor = repository.findById(id).get();
-        existingProfessor.updateFields(updateProfessor);
+        existingProfessor.updateFields(updatedProfessor);
         return repository.save(existingProfessor);
     }
 }

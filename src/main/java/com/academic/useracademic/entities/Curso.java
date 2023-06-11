@@ -12,8 +12,8 @@ public class Curso {
 
     public Curso() {
     }
-    public void updateFields(Aluno updatedAluno) {
-        this.setName(updatedAluno.getName());
+    public void updateFields(Curso updatedCurso) {
+        this.setName(updatedCurso.getName());
     }
     public Long getId() {
         return id;
