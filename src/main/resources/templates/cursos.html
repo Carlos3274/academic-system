@@ -42,7 +42,7 @@
                 <a class="btn btn-warning text-white" th:href="@{/cursos/{id}/edit(id=${curso.id})}">
                     <i class="bi bi-pencil-fill"></i>
                 </a>
-                <button class="btn btn-danger" data-bs-target="#curso-remove-modal" data-bs-toggle="modal" th:value="${curso.getId()}">
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#curso-remove-modal" th:data-id="${curso.id}">
                     <i class="bi-trash-fill"></i>
                 </button>
             </td>
@@ -61,19 +61,28 @@
             <div class="modal-body">
                 Deseja deletar o curso?
             </div>
-            <form th:each="curso : ${cursos}" th:object="${curso}" th:action="@{/cursos/{id}/delete(id=${curso.id})}" method="post">
+            <form id="delete-form" method="post">
                 <input type="hidden" name="_method" value="delete">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Sim</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
 
+<script>
+    // Update form action and submit form with selected course ID
+    var cursoRemoveModal = document.getElementById('curso-remove-modal');
+    cursoRemoveModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var courseId = button.getAttribute('data-id');
+        var form = document.getElementById('delete-form');
+        form.action = '/cursos/' + courseId + '/delete';
+    });
+</script>
 
-</body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
 </html>
