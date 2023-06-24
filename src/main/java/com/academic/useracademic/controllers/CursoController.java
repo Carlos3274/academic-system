@@ -32,5 +32,14 @@ public class CursoController {
         cursoRepository.deleteById(id);
         return "redirect:/cursos";
     }
+
+    @PostMapping("/{id}/edit")
+    public String editCurso(@PathVariable("id") Long id, @RequestParam("name") String newName) {
+        Curso existingCurso = cursoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curso Id"));
+        existingCurso.setName(newName);
+        cursoRepository.save(existingCurso);
+        return "redirect:/cursos";
+    }
+
 }
 

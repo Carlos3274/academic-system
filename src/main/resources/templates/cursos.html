@@ -39,9 +39,10 @@
             <td th:text="${curso.id}"></td>
             <td th:text="${curso.name}"></td>
             <td>
-                <a class="btn btn-warning text-white" th:href="@{/cursos/{id}/edit(id=${curso.id})}">
+                <button class="btn btn-warning text-white" data-bs-target="#curso-edit-modal" data-bs-toggle="modal" th:data-id="${curso.id}">
                     <i class="bi bi-pencil-fill"></i>
-                </a>
+                </button>
+
                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#curso-remove-modal" th:data-id="${curso.id}">
                     <i class="bi-trash-fill"></i>
                 </button>
@@ -50,12 +51,12 @@
         </tbody>
     </table>
 </div>
-
-<div class="modal fade" id="curso-remove-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Remove Modal -->
+<div class="modal fade" id="curso-remove-modal" tabindex="-1" aria-labelledby="removeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Remover Curso</h1>
+                <h1 class="modal-title fs-5" id="removeModalLabel">Remover Curso</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -72,6 +73,31 @@
     </div>
 </div>
 
+<!-- Edit Modal -->
+<div class="modal fade" id="curso-edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Curso</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="curso-edit-form" action="" method="post">
+                    <input type="hidden" name="_method" value="put">
+                    <div class="form-group">
+                        <label for="curso-name">Nome do Curso:</label>
+                        <input type="text" id="curso-name" class="form-control" name="name" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     // Update form action and submit form with selected course ID
     var cursoRemoveModal = document.getElementById('curso-remove-modal');
@@ -81,6 +107,21 @@
         var form = document.getElementById('delete-form');
         form.action = '/cursos/' + courseId + '/delete';
     });
+
+
+    function openEditModal(cursoId, cursoName) {
+        var editForm = document.getElementById('curso-edit-form');
+
+        // Set the curso ID as part of the form's action URL
+        editForm.action = '/cursos/' + cursoId + '/edit';
+
+        // Set the curso name in the form
+        editForm.querySelector('input[name="name"]').value = cursoName;
+
+        // Open the edit modal
+        var modal = new bootstrap.Modal(document.getElementById('curso-edit-modal'));
+        modal.show();
+    }
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
