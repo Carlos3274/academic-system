@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="br">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Professores</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand mx-3" href="/">Sistema Acadêmico</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/cursos}">Cursos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/professores}">Professores</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/alunos}">Alunos</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+  <h2 class="mb-3 mt-3">Professores
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#professor-add-modal">
+      <i class="bi bi-plus"></i> Adicionar
+    </button>
+  </h2>
+  <table class="table table-striped table-bordered text-center">
+
+    <thead class="table-dark">
+    <tr>
+      <th>Id</th>
+      <th>Nome</th>
+      <th>Email</th>
+      <th>Curso</th>
+      <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="professor : ${professores}">
+      <td th:text="${professor.id}"></td>
+      <td th:text="${professor.name}"></td>
+      <td th:text="${professor.email}"></td>
+      <td th:text="${professor.curso != null ? professor.curso.name : ''}"></td>
+      <td>
+        <button class="btn btn-warning text-white" data-bs-target="#professor-edit-modal" data-bs-toggle="modal" th:data-id="${professor.id}" th:data-name="${professor.name}" th:data-email="${professor.email}" th:data-curso-id="${professor.curso != null ? professor.curso.id : ''}">
+          <i class="bi bi-pencil-fill"></i>
+        </button>
+
+        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#professor-remove-modal" th:data-id="${professor.id}">
+          <i class="bi-trash-fill"></i>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Remove Modal -->
+<div class="modal fade" id="professor-remove-modal" tabindex="-1" aria-labelledby="removeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="removeModalLabel">Remover Professor</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Deseja deletar o professor?
+      </div>
+      <form id="delete-form" method="post">
+        <input type="hidden" name="_method" value="delete">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Sim</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="professor-edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Professor</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="professor-edit-form" action="" method="post">
+          <input type="hidden" name="_method" value="put">
+          <div class="form-group">
+            <label for="professor-name">Nome do Professor:</label>
+            <input type="text" id="professor-name" class="form-control" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="professor-email">Email:</label>
+            <input type="email" id="professor-email" class="form-control" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="professor-curso">Curso:</label>
+            <select id="professor-curso" class="form-control" name="cursoId">
+              <option value="">Selecionar Curso</option>
+              <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.name}"></option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- Add Modal -->
+<div class="modal fade" id="professor-add-modal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="addModalLabel">Adicionar Professor</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="professor-add-form" action="/professores/add" method="post">
+          <div class="form-group">
+            <label for="add-professor-name">Nome do Professor:</label>
+            <input type="text" id="add-professor-name" class="form-control" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="add-professor-email">Email:</label>
+            <input type="email" id="add-professor-email" class="form-control" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="add-professor-curso">Curso:</label>
+            <select id="add-professor-curso" class="form-control" name="cursoId">
+              <option value="">Selecionar Curso</option>
+              <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.name}"></option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Update form action and submit form with selected professor ID
+  var professorRemoveModal = document.getElementById('professor-remove-modal');
+  professorRemoveModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var professorId = button.getAttribute('data-id');
+    var form = document.getElementById('delete-form');
+    form.action = '/professores/' + professorId + '/delete';
+  });
+
+  // Set values in the edit modal based on selected professor
+  var professorEditModal = document.getElementById('professor-edit-modal');
+  professorEditModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var professorId = button.getAttribute('data-id');
+    var professorName = button.getAttribute('data-name');
+    var professorEmail = button.getAttribute('data-email');
+    var professorCursoId = button.getAttribute('data-curso-id');
+    var form = document.getElementById('professor-edit-form');
+    form.action = '/professores/' + professorId + '/edit';
+    form.querySelector('input[name="name"]').value = professorName;
+    form.querySelector('input[name="email"]').value = professorEmail;
+    var selectCurso = form.querySelector('select[name="cursoId"]');
+    selectCurso.value = professorCursoId ? professorCursoId : '';
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+</html>

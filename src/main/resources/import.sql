@@ -1,3 +1,5 @@
+INSERT INTO tb_curso (name) VALUES ('Medicina');
+INSERT INTO tb_curso (name) VALUES ('Enfermagem');
 INSERT INTO tb_curso (name) VALUES ('Engenharia de Computação');
 INSERT INTO tb_curso (name) VALUES ('Administração');
 INSERT INTO tb_curso (name) VALUES ('Direito');

@@ -27,6 +27,13 @@ public class CursoController {
         return "cursos";
     }
 
+//    @GetMapping("/cursos")
+//    public String getCursos(Model model) {
+//        Iterable<Curso> cursos = cursoRepository.findAll();
+//        model.addAttribute("cursos", cursos);
+//        return "cursos";
+//    }
+
     @PostMapping("/{id}/delete")
     public String deleteCurso(@PathVariable("id") Long id) {
         cursoRepository.deleteById(id);
@@ -38,6 +45,14 @@ public class CursoController {
         Curso existingCurso = cursoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curso Id"));
         existingCurso.setName(newName);
         cursoRepository.save(existingCurso);
+        return "redirect:/cursos";
+    }
+
+    @PostMapping("/add")
+    public String addCurso(@RequestParam("name") String name) {
+        Curso newCurso = new Curso();
+        newCurso.setName(name);
+        cursoRepository.save(newCurso);
         return "redirect:/cursos";
     }
 
