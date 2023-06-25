@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Alunos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand mx-3" href="/">Sistema Acadêmico</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/cursos}">Cursos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/professores}">Professores</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/alunos}">Alunos</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <h2 class="mb-3 mt-3">Alunos
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#aluno-add-modal">
+            <i class="bi bi-plus"></i> Adicionar
+        </button>
+    </h2>
+    <table class="table table-striped table-bordered text-center">
+
+        <thead class="table-dark">
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Curso</th>
+            <th>Matrícula</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="aluno : ${alunos}">
+            <td th:text="${aluno.id}"></td>
+            <td th:text="${aluno.name}"></td>
+            <td th:text="${aluno.email}"></td>
+            <td th:text="${aluno.curso != null ? aluno.curso.name : ''}"></td>
+            <td th:text="${aluno.matricula}"></td>
+            <td>
+                <button class="btn btn-warning text-white" data-bs-target="#aluno-edit-modal" data-bs-toggle="modal" th:data-id="${aluno.id}" th:data-name="${aluno.name}" th:data-email="${aluno.email}" th:data-curso-id="${aluno.curso != null ? aluno.curso.id : ''}">
+                    <i class="bi bi-pencil-fill"></i>
+                </button>
+
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#aluno-remove-modal" th:data-id="${aluno.id}">
+                    <i class="bi-trash-fill"></i>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Remove Modal -->
+<div class="modal fade" id="aluno-remove-modal" tabindex="-1" aria-labelledby="removeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="removeModalLabel">Remover Aluno</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Deseja deletar o aluno?
+            </div>
+            <form id="delete-form" method="post">
+                <input type="hidden" name="_method" value="delete">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Sim</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="aluno-edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Aluno</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="aluno-edit-form" action="" method="post">
+                    <input type="hidden" name="_method" value="put">
+                    <div class="form-group">
+                        <label for="aluno-name">Nome do Aluno:</label>
+                        <input type="text" id="aluno-name" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="aluno-email">Email:</label>
+                        <input type="email" id="aluno-email" class="form-control" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-aluno-matricula">Matrícula:</label>
+                        <input pattern="[0-9]+" type="text" id="edit-aluno-matricula" class="form-control" name="matricula" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="aluno-curso">Curso:</label>
+                        <select id="aluno-curso" class="form-control" name="cursoId">
+                            <option value="">Selecionar Curso</option>
+                            <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.name}"></option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Add Modal -->
+<div class="modal fade" id="aluno-add-modal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addModalLabel">Adicionar Aluno</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="aluno-add-form" action="/alunos/add" method="post">
+                    <div class="form-group">
+                        <label for="add-aluno-name">Nome do Aluno:</label>
+                        <input type="text" id="add-aluno-name" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-aluno-email">Email:</label>
+                        <input type="email" id="add-aluno-email" class="form-control" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-aluno-matricula">Matrícula:</label>
+                        <input pattern="[0-9]+" type="text" id="add-aluno-matricula" class="form-control" name="matricula" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-aluno-curso">Curso:</label>
+                        <select id="add-aluno-curso" class="form-control" name="cursoId">
+                            <option value="">Selecionar Curso</option>
+                            <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.name}"></option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    // Update form action and submit form with selected aluno ID
+    var alunoRemoveModal = document.getElementById('aluno-remove-modal');
+    alunoRemoveModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var alunoId = button.getAttribute('data-id');
+        var form = document.getElementById('delete-form');
+        form.action = '/alunos/' + alunoId + '/delete';
+    });
+
+    // Set values in the edit modal based on selected aluno
+    var alunoEditModal = document.getElementById('aluno-edit-modal');
+    alunoEditModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var alunoId = button.getAttribute('data-id');
+        var alunoName = button.getAttribute('data-name');
+        var alunoEmail = button.getAttribute('data-email');
+        var alunoCursoId = button.getAttribute('data-curso-id');
+        var form = document.getElementById('aluno-edit-form');
+        form.action = '/alunos/' + alunoId + '/edit';
+        form.querySelector('input[name="name"]').value = alunoName;
+        form.querySelector('input[name="email"]').value = alunoEmail;
+        var selectCurso = form.querySelector('select[name="cursoId"]');
+        selectCurso.value = alunoCursoId ? alunoCursoId : '';
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+</html>
